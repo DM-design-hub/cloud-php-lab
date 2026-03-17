@@ -1,7 +1,10 @@
 {
     "require": {
-        "php": ">=7.4",
-        "ext-pdo": "*",
-        "ext-pgsql": "*"
+        "php": ">=7.4"
+    },
+    "config": {
+        "platform": {
+            "php": "7.4"
+        }
     }
 }
