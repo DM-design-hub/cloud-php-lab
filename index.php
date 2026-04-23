@@ -1,49 +1,46 @@
+<?php
+// Сообщаем браузеру, что это UTF-8
+header("Content-type: text/html; charset=UTF-8");
+
+// Проверяем, существует ли файл
+if (file_exists("catalog.xml")) {
+    // Загружаем XML
+    $sxml = simplexml_load_file("catalog.xml");
+} else {
+    echo "Ошибка: файл catalog.xml не найден!";
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
-<title>SQLite Application</title>
-<meta charset="utf-8">
-<style>
-    table { border-collapse: collapse; width: 50%; }
-    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-    th { background-color: #2196F3; color: white; }
-</style>
+    <title>ЛР 2.3 - Каталог книг</title>
+    <meta charset="UTF-8">
+    <style>
+        table { border-collapse: collapse; width: 50%; font-family: Arial; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #4CAF50; color: white; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+    </style>
 </head>
 <body>
-<h1>Студенты (Cloud Database)</h1>
-<table>
- <tr><th>ФИО</th><th>Возраст</th><th>Адрес</th></tr>
- <?php
- $db = new SQLite3('students.db');
- 
- // Создаем таблицу если нет
- $db->exec("CREATE TABLE IF NOT EXISTS STUDENT (
-     ID INTEGER PRIMARY KEY,
-     NAME TEXT NOT NULL,
-     AGE INTEGER NOT NULL,
-     ADDRESS TEXT
- )");
- 
- // Проверяем есть ли данные
- $result = $db->querySingle("SELECT COUNT(*) FROM STUDENT");
- if ($result == 0) {
-     $db->exec("INSERT INTO STUDENT VALUES (1, 'Иванов Иван', 20, 'Москва')");
-     $db->exec("INSERT INTO STUDENT VALUES (2, 'Петров Петр', 21, 'СПб')");
-     $db->exec("INSERT INTO STUDENT VALUES (3, 'Сидоров Сидор', 19, 'Казань')");
- }
- 
- $result = $db->query("SELECT NAME, AGE, ADDRESS FROM STUDENT");
- while($row = $result->fetchArray(SQLITE3_ASSOC)){
- ?>
- <tr>
-  <td><?php echo $row['NAME']; ?></td>
-  <td><?php echo $row['AGE']; ?></td>
-  <td><?php echo $row['ADDRESS']; ?></td>
- </tr>
- <?php } 
- $db->close();
- ?>
-</table>
-<p><i>База данных: SQLite | Хостинг: Render</i></p>
+    <h1>Каталог книг (Cloud PHP)</h1>
+    <table>
+        <tr>
+            <th>Автор</th>
+            <th>Название</th>
+            <th>Год</th>
+            <th>Цена</th>
+        </tr>
+        <?php foreach($sxml->book as $book){ ?>
+        <tr>
+            <td><?php echo $book->author; ?></td>
+            <td><?php echo $book->title; ?></td>
+            <td><?php echo $book->pubyear; ?></td>
+            <td><?php echo $book->price; ?></td>
+        </tr>
+        <?php } ?>
+    </table>
+    <p><i>Развернуто на Render.com</i></p>
 </body>
 </html>
